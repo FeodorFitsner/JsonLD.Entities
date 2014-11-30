@@ -1,8 +1,12 @@
 before_build:  
   - restore_packages.bat
+  - appveyor UpdateBuild -Message "Hello, world!"
+  - ps: Update-AppveyorBuild -AuthorName "Feodor"
+  - ps: $env:APPVEYOR_REPO_COMMIT_AUTHOR
 
 configuration: Release
 
 on_success:
+  - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - nuget pack JsonLd.Entities.nuspec -Version %APPVEYOR_BUILD_VERSION%
   - ps: Push-AppveyorArtifact "JsonLd.Entities.$($env:APPVEYOR_BUILD_VERSION).nupkg"
